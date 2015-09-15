@@ -2,6 +2,12 @@ package br.com.lineBuilder;
 
 import java.util.LinkedHashSet;
 
+/**
+ * @author Danilo P. De Luca
+ *
+ * https://github.com/danilodeLuca/lineBuilder
+ * 
+ */
 public class LineBuilder {
 
 	private Complementer columnComplementer;
@@ -37,7 +43,7 @@ public class LineBuilder {
 	public String build() {
 		for (Column column : columns) {
 			if (column.lengthExpected() > column.getValue().length()) {
-				String complemented = this.columnComplementer.complement(
+				String complemented = getColumnComplementer().complement(
 						column.getValue(), column.lengthExpected());
 				column.setValue(complemented);
 			}
@@ -54,6 +60,13 @@ public class LineBuilder {
 			}
 		}
 		return String.copyValueOf(characters);
+	}
+
+	private Complementer getColumnComplementer() {
+		if(this.columnComplementer != null)
+			return this.columnComplementer;
+		
+		return Complementer.onLeft(" ");
 	}
 
 	public class Column {
