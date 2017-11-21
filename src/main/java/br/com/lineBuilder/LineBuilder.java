@@ -2,10 +2,12 @@ package br.com.lineBuilder;
 
 import java.util.LinkedHashSet;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @author Danilo P. De Luca
  *
- * https://github.com/danilodeLuca/lineBuilder
+ *         https://github.com/danilodeLuca/lineBuilder
  * 
  */
 public class LineBuilder {
@@ -32,22 +34,21 @@ public class LineBuilder {
 	}
 
 	public Column column(String id) {
-		return new Column(id);
+		return new Column(this, id);
 	}
 
-	private LineBuilder add(Column col) {
+	LineBuilder add(Column col) {
 		columns.add(col);
 		return this;
 	}
 
 	public String build() {
 		for (Column column : columns) {
-			if (column.lengthExpected() > column.getValue().length()) {
-				String complemented = getColumnComplementer().complement(
-						column.getValue(), column.lengthExpected());
+			if (column.lengthExpected() > column.getValueAsNotNull().length()) {
+				String complemented = column.getColumnComplementer().complement(column.getValueAsNotNull(), column.lengthExpected());
 				column.setValue(complemented);
 			}
-			final char[] charToReplace = column.getValue().toCharArray();
+			final char[] charToReplace = column.getValueAsNotNull().toCharArray();
 			int count = 0;
 			for (int i = column.getStart(); i <= column.getEnd(); i++) {
 				characters[i] = charToReplace[count];
@@ -62,20 +63,20 @@ public class LineBuilder {
 		return String.copyValueOf(characters);
 	}
 
-	private Complementer getColumnComplementer() {
-		if(this.columnComplementer != null)
-			return this.columnComplementer;
-		
-		return Complementer.onLeft(" ");
+	public Complementer getColumnComplementer() {
+		return columnComplementer;
 	}
 
 	public class Column {
+		private final LineBuilder lineBuilder;
 		private final String id;
 		private int start;
 		private int end;
 		private String value;
+		private boolean numeric = false;
 
-		public Column(String id) {
+		public Column(LineBuilder lineBuilder, String id) {
+			this.lineBuilder = lineBuilder;
 			this.id = id;
 		}
 
@@ -85,9 +86,14 @@ public class LineBuilder {
 			return this;
 		}
 
+		public Column numeric() {
+			this.numeric = true;
+			return this;
+		}
+
 		public LineBuilder value(String value) {
 			this.value = value;
-			return add(this);
+			return this.lineBuilder.add(this);
 		}
 
 		public int getStart() {
@@ -110,6 +116,10 @@ public class LineBuilder {
 			return value;
 		}
 
+		public String getValueAsNotNull() {
+			return value != null ? value : StringUtils.EMPTY;
+		}
+
 		public void setValue(String value) {
 			this.value = value;
 		}
@@ -125,6 +135,24 @@ public class LineBuilder {
 		@Override
 		public String toString() {
 			return value;
+		}
+
+		public boolean isNumeric() {
+			return numeric;
+		}
+
+		public void setNumeric(boolean numeric) {
+			this.numeric = numeric;
+		}
+
+		public Complementer getColumnComplementer() {
+			if (this.lineBuilder.getColumnComplementer() != null)
+				return this.lineBuilder.getColumnComplementer();
+
+			if (isNumeric())
+				return Complementer.onLeft("0");
+
+			return Complementer.onLeft(" ");
 		}
 	}
 }
