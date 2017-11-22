@@ -9,7 +9,7 @@ Checkout tests to see how it works, its not difficult!!
 
 ``` 
     String build = new LineBuilder(4)
-                      .column("test").at(0, 3).value("test")
+                      .column("test").at(1, 4).value("test")
                       .build();
 ```
   
@@ -20,8 +20,8 @@ Checkout tests to see how it works, its not difficult!!
   
 ```
     String build = new LineBuilder(9)
-                      .column("test").at(0, 3).value("test")
-                      .column("test2").at(4, 8).value("test2")
+                      .column("test").at(1, 4).value("test")
+                      .column("test2").at(5, 9).value("test2")
                       .build();
 ```
   
@@ -33,7 +33,7 @@ Checkout tests to see how it works, its not difficult!!
 ```
     String build = new LineBuilder(4)
                       .complementColumn(Complementer.onLeft("|"))
-                      .column("test").at(0, 3).value("test")
+                      .column("test").at(1, 4).value("test")
                       .build();
 ```
   
@@ -45,7 +45,7 @@ Checkout tests to see how it works, its not difficult!!
 ```
     String build = new LineBuilder(5)
                       .complementColumn(Complementer.onLeft("|"))
-                      .column("test").at(0, 4).value("test")
+                      .column("test").at(1, 5).value("test")
                       .build();
 ```
   
@@ -57,7 +57,7 @@ Checkout tests to see how it works, its not difficult!!
 ```
     String build = new LineBuilder(5)
                       .complementColumn(Complementer.onRight("|"))
-                      .column("test").at(0, 4).value("test")
+                      .column("test").at(1, 5).value("test")
                       .build();
 ```
   
