@@ -50,7 +50,7 @@ public class LineBuilder {
 			}
 			final char[] charToReplace = column.getValueAsNotNull().toCharArray();
 			int count = 0;
-			for (int i = column.getStart(); i <= column.getEnd(); i++) {
+			for (int i = column.getStart() - 1; i < column.getEnd(); i++) {
 				characters[i] = charToReplace[count];
 				count++;
 			}
