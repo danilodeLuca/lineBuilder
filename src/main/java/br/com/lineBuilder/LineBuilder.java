@@ -20,7 +20,7 @@ public class LineBuilder {
 	public LineBuilder(int length) {
 		this.columns = new LinkedHashSet<>();
 		this.characters = new char[length];
-		this.lineComplementer = " ".charAt(0);// FIXME
+		this.lineComplementer = ' ';
 	}
 
 	public LineBuilder lineComplement(char character) {
@@ -34,7 +34,7 @@ public class LineBuilder {
 	}
 
 	public Column column(String id) {
-		return new Column(this, id);
+		return new Column(id);
 	}
 
 	LineBuilder add(Column col) {
@@ -68,15 +68,13 @@ public class LineBuilder {
 	}
 
 	public class Column {
-		private final LineBuilder lineBuilder;
 		private final String id;
 		private int start;
 		private int end;
 		private String value;
 		private boolean numeric = false;
 
-		public Column(LineBuilder lineBuilder, String id) {
-			this.lineBuilder = lineBuilder;
+		public Column(String id) {
 			this.id = id;
 		}
 
@@ -93,7 +91,7 @@ public class LineBuilder {
 
 		public LineBuilder value(String value) {
 			this.value = value;
-			return this.lineBuilder.add(this);
+			return LineBuilder.this.add(this);
 		}
 
 		public int getStart() {
@@ -146,8 +144,8 @@ public class LineBuilder {
 		}
 
 		public Complementer getColumnComplementer() {
-			if (this.lineBuilder.getColumnComplementer() != null)
-				return this.lineBuilder.getColumnComplementer();
+			if (LineBuilder.this.getColumnComplementer() != null)
+				return LineBuilder.this.getColumnComplementer();
 
 			if (isNumeric())
 				return Complementer.onLeft("0");
