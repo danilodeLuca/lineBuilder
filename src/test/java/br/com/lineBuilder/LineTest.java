@@ -7,8 +7,7 @@ public class LineTest {
 
 	@Test
 	public void simpleColumn() {
-		String build = new LineBuilder(4).column("test").at(1, 4).value("test")
-				.build();
+		String build = new LineBuilder(4).column("test").at(1, 4).value("test").build();
 		Assert.assertEquals("test", build);
 	}
 
